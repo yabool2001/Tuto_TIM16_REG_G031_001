@@ -14,6 +14,10 @@
  * If no LICENSE file comes with this software, it is provided AS-IS.
  *
  ******************************************************************************
+ ******************************************************************************
+ *
+ * v0.0.2
+ *
  */
 
 #include <stdint.h>
@@ -35,7 +39,7 @@ int main(void)
 {
 	ldg_init () ;
 	tim16_irq = 0 ;
-	start_tim16 ( (uint16_t) 1000 ) ;
+	start_tim16 ( (uint16_t) 10000 ) ;
 	while  ( 1 )
 	{
 		if ( tim16_irq == 1 )
@@ -85,21 +89,24 @@ void reset_sr_uif_bit ( void )
 {
 	TIM16->CNT = (uint16_t) 0 ;
 	TIM16->SR &= ~TIM_SR_UIF ;		// Clear IRQ flag
-	TIM16->SR &= ~TIM_SR_CC1IF ; 	// CC1IF: Capture/Compare 1 interrupt flag
+	//TIM16->SR &= ~TIM_SR_CC1IF ; 	// CC1IF: Capture/Compare 1 interrupt flag
 }
 
 void TIM16_IRQHandler ( void )
 {
+	/*
 	tim16_irq = 1 ;
 	tim16_off () ;
-	/*
-	if ( TIM16->SR && TIM_SR_UIF && tim16_irq_0 )
+	*/
+
+	if ( tim16_irq_0 != 0)
 	{
 		tim16_irq = 1 ;
+		tim16_off () ;
 	}
 	else
 	{
 		tim16_irq_0 = 1 ;
+		TIM16->SR &= ~TIM_SR_UIF ;		// Clear IRQ flag
 	}
-	*/
 }

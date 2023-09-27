@@ -1,9 +1,9 @@
 C:/Users/mzeml/embedded/Tuto_TIM16_REG_G031_001/CMSIS/Include/core_cm0plus.h:741:22:__NVIC_EnableIRQ	16	static,ignoring_inline_asm
 C:/Users/mzeml/embedded/Tuto_TIM16_REG_G031_001/CMSIS/Include/core_cm0plus.h:850:22:__NVIC_SetPriority	24	static
-../Src/main.c:34:5:main	8	static
-../Src/main.c:50:6:ldg_init	8	static
-../Src/main.c:60:6:config_tim16	16	static
-../Src/main.c:70:6:start_tim16	16	static
-../Src/main.c:77:6:tim16_off	8	static
-../Src/main.c:84:6:reset_sr_uif_bit	8	static
-../Src/main.c:91:6:TIM16_IRQHandler	8	static
+../Src/main.c:38:5:main	8	static
+../Src/main.c:54:6:ldg_init	8	static
+../Src/main.c:64:6:config_tim16	16	static
+../Src/main.c:74:6:start_tim16	16	static
+../Src/main.c:81:6:tim16_off	8	static
+../Src/main.c:88:6:reset_sr_uif_bit	8	static
+../Src/main.c:95:6:TIM16_IRQHandler	8	static
