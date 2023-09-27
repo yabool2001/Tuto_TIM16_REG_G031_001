@@ -6,4 +6,4 @@ C:/Users/mzeml/embedded/Tuto_TIM16_REG_G031_001/CMSIS/Include/core_cm0plus.h:850
 ../Src/main.c:74:6:start_tim16	1
 ../Src/main.c:81:6:tim16_off	1
 ../Src/main.c:88:6:reset_sr_uif_bit	1
-../Src/main.c:95:6:TIM16_IRQHandler	2
+../Src/main.c:95:6:TIM16_IRQHandler	1

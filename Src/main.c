@@ -94,11 +94,11 @@ void reset_sr_uif_bit ( void )
 
 void TIM16_IRQHandler ( void )
 {
-	/*
+	TIM16->SR &= ~TIM_SR_UIF ;		// Clear IRQ flag
 	tim16_irq = 1 ;
 	tim16_off () ;
-	*/
 
+	/*
 	if ( tim16_irq_0 != 0)
 	{
 		tim16_irq = 1 ;
@@ -109,4 +109,5 @@ void TIM16_IRQHandler ( void )
 		tim16_irq_0 = 1 ;
 		TIM16->SR &= ~TIM_SR_UIF ;		// Clear IRQ flag
 	}
+	*/
 }
