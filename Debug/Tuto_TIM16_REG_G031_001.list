@@ -275,7 +275,7 @@ int main(void)
  8000228:	019b      	lsls	r3, r3, #6
  800022a:	0018      	movs	r0, r3
  800022c:	f000 f84e 	bl	80002cc <config_tim16>
-	start_tim16 ( (uint16_t) 3000 ) ;
+	start_tim16 ( (uint16_t) 10000 ) ;
  8000230:	4b0b      	ldr	r3, [pc, #44]	; (8000260 <main+0x48>)
  8000232:	0018      	movs	r0, r3
  8000234:	f000 f87e 	bl	8000334 <start_tim16>
@@ -301,7 +301,7 @@ int main(void)
 	while  ( 1 )
  800025a:	e7fe      	b.n	800025a <main+0x42>
  800025c:	2000001c 	.word	0x2000001c
- 8000260:	00000bb8 	.word	0x00000bb8
+ 8000260:	00002710 	.word	0x00002710
  8000264:	2000001d 	.word	0x2000001d
 
 08000268 <ldg_init>:

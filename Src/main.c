@@ -37,7 +37,7 @@ int main(void)
 	ldg_init () ;
 	tim16_irq = 0 ;
 	config_tim16 ( G031_SYS_CLOCK ) ;
-	start_tim16 ( (uint16_t) 3000 ) ;
+	start_tim16 ( (uint16_t) 10000 ) ;
 	while ( tim16_irq_0 == 0 )
 		;
 	stop_tim16 () ;
