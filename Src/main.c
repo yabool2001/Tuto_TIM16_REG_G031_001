@@ -61,7 +61,7 @@ void config_tim16 ( uint16_t sys_config)
 {
 	RCC->APBENR2	|= RCC_APBENR2_TIM16EN ; 	// Enable TIM16 clock
 	TIM16->PSC 		= sys_config - 1 ; 			// default: 0,001 s = 1000 Hz = ( 16 000 000 Hz / 16 000 )
-	TIM16->EGR		|= TIM_EGR_UG ; 		//Clear EGR force Update
+	TIM16->EGR		|= TIM_EGR_UG ; 		// Force EGR.UG update
 	TIM16->SR 		&= ~TIM_SR_UIF ;			//Clean UIF Flag
 	//reset_sr_uif_bit () ;
 	TIM16->DIER 	|= TIM_DIER_UIE ; 			// Enable interrupt generation
