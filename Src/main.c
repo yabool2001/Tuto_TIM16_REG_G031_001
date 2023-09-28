@@ -14,10 +14,6 @@
  * If no LICENSE file comes with this software, it is provided AS-IS.
  *
  ******************************************************************************
- ******************************************************************************
- *
- * v0.0.2
- *
  */
 
 #include <stdint.h>
@@ -65,6 +61,8 @@ void config_tim16 ( uint16_t sys_config) // LDG = PC6
 {
 	RCC->APBENR2	|= RCC_APBENR2_TIM16EN ; 	// Enable TIM16 clock
 	TIM16->PSC 		= sys_config - 1 ; 			// default: 0,001 s = 1000 Hz = ( 16 000 000 Hz / 16 000 )
+	TIM16->EGR		|= TIM_EGR_UG ; 		//Clear EGR force Update
+	TIM16->SR 		&= ~TIM_SR_UIF ;			//Clean UIF Flag
 	//reset_sr_uif_bit () ;
 	TIM16->DIER 	|= TIM_DIER_UIE ; 			// Enable interrupt generation
 	NVIC_SetPriority 	( TIM16_IRQn , 0 ) ;	// Configure interrupt priority
@@ -89,25 +87,21 @@ void reset_sr_uif_bit ( void )
 {
 	TIM16->CNT = (uint16_t) 0 ;
 	TIM16->SR &= ~TIM_SR_UIF ;		// Clear IRQ flag
-	//TIM16->SR &= ~TIM_SR_CC1IF ; 	// CC1IF: Capture/Compare 1 interrupt flag
+	TIM16->SR &= ~TIM_SR_CC1IF ; 	// CC1IF: Capture/Compare 1 interrupt flag
 }
 
 void TIM16_IRQHandler ( void )
 {
-	TIM16->SR &= ~TIM_SR_UIF ;		// Clear IRQ flag
 	tim16_irq = 1 ;
 	tim16_off () ;
-
 	/*
-	if ( tim16_irq_0 != 0)
+	if ( TIM16->SR && TIM_SR_UIF && tim16_irq_0 )
 	{
 		tim16_irq = 1 ;
-		tim16_off () ;
 	}
 	else
 	{
 		tim16_irq_0 = 1 ;
-		TIM16->SR &= ~TIM_SR_UIF ;		// Clear IRQ flag
 	}
 	*/
 }
