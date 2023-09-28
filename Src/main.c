@@ -19,7 +19,7 @@
 #include <stdint.h>
 #include "stm32g031xx.h"
 
-#define G031_SYS_CLOCK	16000
+#define G031_SYS_CLOCK	(uint16_t) 16000
 #define TOGGLE_LDG 		GPIOC->ODR ^= GPIO_ODR_OD6
 
 uint8_t tim16_irq = 0 ;
@@ -28,6 +28,7 @@ uint16_t tim16_arr = 0 ;
 void ldg_init ( void ) ;
 void config_tim16 ( uint16_t ) ;
 void start_tim16 ( uint16_t ) ;
+void stop_tim16 ( void ) ;
 void tim16_off ( void ) ;
 void reset_sr_uif_bit ( void ) ;
 
@@ -35,16 +36,15 @@ int main(void)
 {
 	ldg_init () ;
 	tim16_irq = 0 ;
-	start_tim16 ( (uint16_t) 10000 ) ;
+	config_tim16 ( G031_SYS_CLOCK ) ;
+	start_tim16 ( (uint16_t) 3000 ) ;
+	while ( tim16_irq_0 == 0 )
+		;
+	stop_tim16 () ;
+	config_tim16 ( G031_SYS_CLOCK ) ;
+	start_tim16 ( (uint16_t) 1000 ) ;
 	while  ( 1 )
-	{
-		if ( tim16_irq == 1 )
-		{
-			tim16_irq = 0 ;
-			TOGGLE_LDG ;
-			start_tim16 ( 1000 ) ;
-		}
-	}
+		;
 }
 
 void ldg_init ( void ) // LDG = PC6
@@ -57,7 +57,7 @@ void ldg_init ( void ) // LDG = PC6
 	GPIOC->PUPDR 	&= 	~GPIO_PUPDR_PUPD6 ;
 }
 
-void config_tim16 ( uint16_t sys_config) // LDG = PC6
+void config_tim16 ( uint16_t sys_config)
 {
 	RCC->APBENR2	|= RCC_APBENR2_TIM16EN ; 	// Enable TIM16 clock
 	TIM16->PSC 		= sys_config - 1 ; 			// default: 0,001 s = 1000 Hz = ( 16 000 000 Hz / 16 000 )
@@ -69,11 +69,20 @@ void config_tim16 ( uint16_t sys_config) // LDG = PC6
 	NVIC_EnableIRQ 		( TIM16_IRQn ) ;		// Enable interrupt
 }
 
-void start_tim16 ( uint16_t tim16_arr ) // LDG = PC6
+void start_tim16 ( uint16_t tim16_arr )
 {
-	config_tim16 ( (uint16_t) G031_SYS_CLOCK ) ;
 	TIM16->ARR 	=  tim16_arr - 1 ;		// default: 2 s = 2000 * 0,001s
 	TIM16->CR1 	|= TIM_CR1_CEN ;		// Start count TIM16
+}
+
+void stop_tim16 ()
+{
+	TIM16->CR1 	&= ~TIM_CR1_CEN ;		// Start count TIM16
+}
+
+void arr_tim16 ( uint16_t tim16_arr )
+{
+	TIM16->ARR 	=  tim16_arr - 1 ;		// default: 2 s = 2000 * 0,001s
 }
 
 void tim16_off ( void ) // Save energy and Disable TIM16 clock
@@ -92,8 +101,14 @@ void reset_sr_uif_bit ( void )
 
 void TIM16_IRQHandler ( void )
 {
+	TOGGLE_LDG ;
+	tim16_irq_0 = 1 ;
+	TIM16->SR 		&= ~TIM_SR_UIF ;			//Clean UIF Flag
+	/*
+	tim16_irq_0 = 1 ;
 	tim16_irq = 1 ;
-	tim16_off () ;
+	*/
+	//tim16_off () ;
 	/*
 	if ( TIM16->SR && TIM_SR_UIF && tim16_irq_0 )
 	{
