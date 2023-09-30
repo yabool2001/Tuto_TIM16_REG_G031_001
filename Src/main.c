@@ -20,7 +20,7 @@
 #include "stm32g031xx.h"
 #include "my_tims.h"
 
-#define G031_MY_SYS_CLOCK	(uint16_t) 16000
+#define G031_MY_TIMCLOCK	(uint32_t) 16000000
 #define TOGGLE_LDG 			GPIOC->ODR ^= GPIO_ODR_OD6
 
 uint8_t my_tim16_irq = 0 ;
@@ -30,12 +30,12 @@ void ldg_init ( void ) ;
 int main(void)
 {
 	ldg_init () ;
-	config_my_tim16 ( G031_MY_SYS_CLOCK ) ;
+	config_my_tim16 ( G031_MY_TIMCLOCK ) ;
 	start_my_tim16 ( (uint16_t) 10000 ) ;
 	while ( my_tim16_irq == 0 )
 		;
 	off_my_tim16 () ;
-	config_my_tim16 ( G031_MY_SYS_CLOCK ) ;
+	config_my_tim16 ( G031_MY_TIMCLOCK ) ;
 	start_my_tim16 ( (uint16_t) 1000 ) ;
 	while  ( 1 )
 		;
