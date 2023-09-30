@@ -2,5 +2,5 @@ C:/Users/mzeml/embedded/Tuto_TIM16_REG_G031_001/CMSIS/Include/core_cm0plus.h:741
 C:/Users/mzeml/embedded/Tuto_TIM16_REG_G031_001/CMSIS/Include/core_cm0plus.h:850:22:__NVIC_SetPriority	2
 ../my_drivers/Src/my_tims.c:11:6:config_my_tim16	1
 ../my_drivers/Src/my_tims.c:22:6:start_my_tim16	1
-../my_drivers/Src/my_tims.c:28:6:stop_my_tim16	1
-../my_drivers/Src/my_tims.c:34:6:off_my_tim16	1
+../my_drivers/Src/my_tims.c:29:6:stop_my_tim16	1
+../my_drivers/Src/my_tims.c:35:6:off_my_tim16	1

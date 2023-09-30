@@ -21,14 +21,15 @@ void config_my_tim16 ( uint16_t my_sys_clock_config )
 
 void start_my_tim16 ( uint16_t my_tim16_arr )
 {
-	TIM16->ARR 	=  my_tim16_arr - 1 ;	// default: 2 s = 2000 * 0,001s
-	TIM16->CR1 	|= TIM_CR1_CEN ;		// Start count TIM16
+	RCC->APBENR2	|= RCC_APBENR2_TIM16EN ; 	// Enable TIM16 clock
+	TIM16->ARR 		=  my_tim16_arr - 1 ;	// default: 2 s = 2000 * 0,001s
+	TIM16->CR1 		|= TIM_CR1_CEN ;		// Start counting TIM16
 }
 
 void stop_my_tim16 ()
 {
 	TIM16->SR 	&= ~TIM_SR_UIF ;		//Clean UIF Flag
-	TIM16->CR1 	&= ~TIM_CR1_CEN ;		// Start count TIM16
+	TIM16->CR1 	&= ~TIM_CR1_CEN ;		// Stop counting TIM16
 }
 
 void off_my_tim16 () // Save energy and Disable TIM16 clock
