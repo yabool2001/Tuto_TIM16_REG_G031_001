@@ -34,7 +34,7 @@ int main(void)
 	start_my_tim16 ( (uint16_t) 10000 ) ;
 	while ( my_tim16_irq == 0 )
 		;
-	stop_my_tim16 () ;
+	off_my_tim16 () ;
 	config_my_tim16 ( G031_MY_SYS_CLOCK ) ;
 	start_my_tim16 ( (uint16_t) 1000 ) ;
 	while  ( 1 )

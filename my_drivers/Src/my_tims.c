@@ -27,13 +27,13 @@ void start_my_tim16 ( uint16_t my_tim16_arr )
 
 void stop_my_tim16 ()
 {
+	TIM16->SR 	&= ~TIM_SR_UIF ;		//Clean UIF Flag
 	TIM16->CR1 	&= ~TIM_CR1_CEN ;		// Start count TIM16
 }
 
 void off_my_tim16 () // Save energy and Disable TIM16 clock
 {
-	TIM16->SR 		&= ~TIM_SR_UIF ;			//Clean UIF Flag
-	TIM16->CR1 		&= ~TIM_CR1_CEN ;			// Disable TIM16 counter
+	stop_my_tim16 () ;
 	RCC->APBENR2 	&= ~RCC_APBENR2_TIM16EN ; 	// Save energy: disable TIM16 clock
 }
 
