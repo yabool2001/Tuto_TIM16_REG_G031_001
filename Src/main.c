@@ -18,31 +18,27 @@
 
 #include <stdint.h>
 #include "stm32g031xx.h"
+#include "my_tims.h"
 
-#define G031_SYS_CLOCK	(uint16_t) 16000
 #define TOGGLE_LDG 		GPIOC->ODR ^= GPIO_ODR_OD6
 
 uint8_t tim16_irq = 0 ;
 uint8_t tim16_irq_0 = 0 ;
 uint16_t tim16_arr = 0 ;
 void ldg_init ( void ) ;
-void config_tim16 ( uint16_t ) ;
-void start_tim16 ( uint16_t ) ;
-void stop_tim16 ( void ) ;
-void tim16_off ( void ) ;
 void reset_sr_uif_bit ( void ) ;
 
 int main(void)
 {
 	ldg_init () ;
 	tim16_irq = 0 ;
-	config_tim16 ( G031_SYS_CLOCK ) ;
-	start_tim16 ( (uint16_t) 10000 ) ;
+	config_my_tim16 ( G031_STD_SYS_CLOCK ) ;
+	start_my_tim16 ( (uint16_t) 10000 ) ;
 	while ( tim16_irq_0 == 0 )
 		;
-	stop_tim16 () ;
-	config_tim16 ( G031_SYS_CLOCK ) ;
-	start_tim16 ( (uint16_t) 1000 ) ;
+	stop_my_tim16 () ;
+	config_my_tim16 ( G031_STD_SYS_CLOCK ) ;
+	start_my_tim16 ( (uint16_t) 1000 ) ;
 	while  ( 1 )
 		;
 }
@@ -57,40 +53,9 @@ void ldg_init ( void ) // LDG = PC6
 	GPIOC->PUPDR 	&= 	~GPIO_PUPDR_PUPD6 ;
 }
 
-void config_tim16 ( uint16_t sys_config)
-{
-	RCC->APBENR2	|= RCC_APBENR2_TIM16EN ; 	// Enable TIM16 clock
-	TIM16->PSC 		= sys_config - 1 ; 			// default: 0,001 s = 1000 Hz = ( 16 000 000 Hz / 16 000 )
-	TIM16->EGR		|= TIM_EGR_UG ; 		// Force EGR.UG update
-	TIM16->SR 		&= ~TIM_SR_UIF ;			//Clean UIF Flag
-	//reset_sr_uif_bit () ;
-	TIM16->DIER 	|= TIM_DIER_UIE ; 			// Enable interrupt generation
-	NVIC_SetPriority 	( TIM16_IRQn , 0 ) ;	// Configure interrupt priority
-	NVIC_EnableIRQ 		( TIM16_IRQn ) ;		// Enable interrupt
-}
 
-void start_tim16 ( uint16_t tim16_arr )
-{
-	TIM16->ARR 	=  tim16_arr - 1 ;		// default: 2 s = 2000 * 0,001s
-	TIM16->CR1 	|= TIM_CR1_CEN ;		// Start count TIM16
-}
 
-void stop_tim16 ()
-{
-	TIM16->CR1 	&= ~TIM_CR1_CEN ;		// Start count TIM16
-}
 
-void arr_tim16 ( uint16_t tim16_arr )
-{
-	TIM16->ARR 	=  tim16_arr - 1 ;		// default: 2 s = 2000 * 0,001s
-}
-
-void tim16_off ( void ) // Save energy and Disable TIM16 clock
-{
-	TIM16->SR 		&= ~TIM_SR_UIF ;			//Clean UIF Flag
-	TIM16->CR1 		&= ~TIM_CR1_CEN ;			// Disable TIM16 counter
-	RCC->APBENR2 	&= ~RCC_APBENR2_TIM16EN ; 	// Save energy: disable TIM16 clock
-}
 
 void reset_sr_uif_bit ( void )
 {

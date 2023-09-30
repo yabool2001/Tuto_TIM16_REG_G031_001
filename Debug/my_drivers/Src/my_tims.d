@@ -1,4 +1,4 @@
-Src/main.o: ../Src/main.c \
+my_drivers/Src/my_tims.o: ../my_drivers/Src/my_tims.c \
  C:/Users/mzeml/embedded/Tuto_TIM16_REG_G031_001/CMSIS/Device/ST/STM32G0xx/Include/stm32g031xx.h \
  C:/Users/mzeml/embedded/Tuto_TIM16_REG_G031_001/CMSIS/Include/core_cm0plus.h \
  C:/Users/mzeml/embedded/Tuto_TIM16_REG_G031_001/CMSIS/Include/cmsis_version.h \
