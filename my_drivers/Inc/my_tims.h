@@ -8,8 +8,6 @@
 #ifndef MY_TIMS_H_
 #define MY_TIMS_H_
 
-#define G031_STD_SYS_CLOCK	(uint16_t) 16000
-
 void config_my_tim16	( uint16_t ) ;
 void start_my_tim16 	( uint16_t ) ;
 void stop_my_tim16 		( void ) ;

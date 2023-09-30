@@ -20,7 +20,8 @@
 #include "stm32g031xx.h"
 #include "my_tims.h"
 
-#define TOGGLE_LDG 		GPIOC->ODR ^= GPIO_ODR_OD6
+#define G031_MY_SYS_CLOCK	(uint16_t) 16000
+#define TOGGLE_LDG 			GPIOC->ODR ^= GPIO_ODR_OD6
 
 uint8_t tim16_irq = 0 ;
 uint8_t tim16_irq_0 = 0 ;
@@ -32,12 +33,12 @@ int main(void)
 {
 	ldg_init () ;
 	tim16_irq = 0 ;
-	config_my_tim16 ( G031_STD_SYS_CLOCK ) ;
+	config_my_tim16 ( G031_MY_SYS_CLOCK ) ;
 	start_my_tim16 ( (uint16_t) 10000 ) ;
 	while ( tim16_irq_0 == 0 )
 		;
 	stop_my_tim16 () ;
-	config_my_tim16 ( G031_STD_SYS_CLOCK ) ;
+	config_my_tim16 ( G031_MY_SYS_CLOCK ) ;
 	start_my_tim16 ( (uint16_t) 1000 ) ;
 	while  ( 1 )
 		;
@@ -53,10 +54,6 @@ void ldg_init ( void ) // LDG = PC6
 	GPIOC->PUPDR 	&= 	~GPIO_PUPDR_PUPD6 ;
 }
 
-
-
-
-
 void reset_sr_uif_bit ( void )
 {
 	TIM16->CNT = (uint16_t) 0 ;
@@ -69,19 +66,4 @@ void TIM16_IRQHandler ( void )
 	TOGGLE_LDG ;
 	tim16_irq_0 = 1 ;
 	TIM16->SR 		&= ~TIM_SR_UIF ;			//Clean UIF Flag
-	/*
-	tim16_irq_0 = 1 ;
-	tim16_irq = 1 ;
-	*/
-	//tim16_off () ;
-	/*
-	if ( TIM16->SR && TIM_SR_UIF && tim16_irq_0 )
-	{
-		tim16_irq = 1 ;
-	}
-	else
-	{
-		tim16_irq_0 = 1 ;
-	}
-	*/
 }
